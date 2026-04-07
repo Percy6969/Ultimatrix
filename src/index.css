@@ -1,0 +1,112 @@
+/* =========================
+   ROOT VARIABLES (FIGMA COLORS ONLY)
+========================= */
+:root {
+  --text: #6b6375;
+  --text-h: #08060d;
+  --bg: #ffffff;
+  --border: #e5e4e7;
+  --code-bg: #f4f3ec;
+
+  --accent: #aa3bff;
+  --accent-bg: rgba(170, 59, 255, 0.1);
+  --accent-border: rgba(170, 59, 255, 0.5);
+
+  --shadow:
+    rgba(0, 0, 0, 0.1) 0 10px 15px -3px,
+    rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  font-size: 18px;
+  line-height: 1.45;
+  letter-spacing: 0.18px;
+
+  color: var(--text);
+  background: var(--bg);
+}
+
+/* =========================
+   GLOBAL RESET
+========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: var(--sans);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* =========================
+   ROOT CONTAINER (FULL WIDTH)
+========================= */
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+}
+
+/* =========================
+   TYPOGRAPHY
+========================= */
+h1,
+h2 {
+  font-family: var(--heading);
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+h1 {
+  font-size: 48px;
+  letter-spacing: -1px;
+  margin-bottom: 16px;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+p {
+  color: var(--text);
+}
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+}
+/* =========================
+   RESPONSIVE FIX
+========================= */
+@media (max-width: 1024px) {
+  h1 {
+    font-size: 34px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+}
+
+/* =========================
+   CODE STYLE
+========================= */
+code {
+  font-family: var(--mono);
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background: var(--code-bg);
+}
+
+/* =========================
+   UTILITY (OPTIONAL)
+========================= */
+.container {
+  width: 100%;
+  padding: 24px 40px;
+}
