@@ -1,7 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ScoreBar from "../components/ScoreBar";
 import Sidebar from "../components/Sidebar";
+import { generateQuestion, validateAnswer } from "../services/ai";
 import "./Quiz.css";
 
 function Quiz() {
@@ -9,14 +10,27 @@ function Quiz() {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const [score, setScore] = useState(82);
+  const [scores, setScores] = useState(() => {
+    const saved = localStorage.getItem("quizScores");
+    return saved ? JSON.parse(saved) : { physics: 50, chemistry: 50, mathematics: 50 };
+  });
+
+  const score = scores[subject] ?? 50;
+
+  const updateScore = (newScore) => {
+    setScores(prev => {
+      const nextScores = { ...prev, [subject]: newScore };
+      localStorage.setItem("quizScores", JSON.stringify(nextScores));
+      return nextScores;
+    });
+  };
+
   const [answer, setAnswer] = useState("");
 
-  const questions = {
-    physics: "What is the difference between velocity and speed?",
-    chemistry: "What is the difference between an exothermic and endothermic reaction?",
-    mathematics: "What is the derivative of x^3 + 2x^2 + 5?",
-  };
+  const [question, setQuestion] = useState("Loading question...");
+  const [isLoadingQuestion, setIsLoadingQuestion] = useState(true);
+  const [isEvaluating, setIsEvaluating] = useState(false);
+  const [feedback, setFeedback] = useState("");
 
   const subjectConfig = {
     physics: { color: "#2563eb", label: "Physics" },
@@ -25,14 +39,34 @@ function Quiz() {
   };
 
   const config = subjectConfig[subject] || subjectConfig.physics;
-  const question = questions[subject] || "Sample question";
 
-  const checkAnswer = () => {
-    if (answer.toLowerCase() === "correct") {
-      setScore(Math.min(score + 10, 100));
+  const loadQuestion = async () => {
+    setIsLoadingQuestion(true);
+    setFeedback("");
+    setAnswer("");
+    const newQ = await generateQuestion(config.label);
+    setQuestion(newQ);
+    setIsLoadingQuestion(false);
+  };
+
+  useEffect(() => {
+    loadQuestion();
+  }, [subject]);
+
+  const checkAnswer = async () => {
+    if (!answer.trim()) return;
+    setIsEvaluating(true);
+
+    const result = await validateAnswer(question, answer, config.label);
+
+    if (result.isCorrect) {
+      updateScore(Math.min(score + 10, 100));
     } else {
-      setScore(Math.max(score - 10, 0));
+      updateScore(Math.max(score - 10, 0));
     }
+
+    setFeedback(result.explanation);
+    setIsEvaluating(false);
   };
 
   const toggleSidebar = () => {
@@ -53,35 +87,52 @@ function Quiz() {
             <span></span>
             <span></span>
           </button>
-        <button className="back-link" onClick={() => navigate("/")}>
-          ← Back to Topics
-        </button>
-
-        <h1 className="quiz-title">{config.label}</h1>
-
-        <div className="question-card">
-          <h2 className="question-label">Question</h2>
-          <p className="question-text">{question}</p>
-
-          <textarea
-            className="answer-input"
-            placeholder="Enter your answer..."
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
-          />
-
-          <button
-            className="submit-btn"
-            style={{ backgroundColor: config.color }}
-            onClick={checkAnswer}
-          >
-            Submit Answer
+          <button className="back-link" onClick={() => navigate("/")}>
+            ← Back to Topics
           </button>
-        </div>
-      </div>
 
-      <ScoreBar score={score} color={config.color} />
-    </div>
+          <h1 className="quiz-title">{config.label}</h1>
+
+          <div className="question-card">
+            <h2 className="question-label">Question</h2>
+            <p className="question-text">
+              {isLoadingQuestion ? <span className="loading-text" style={{ color: '#9ca3af', fontStyle: 'italic' }}>Our AI is generating a question...</span> : question}
+            </p>
+
+            <textarea
+              className="answer-input"
+              placeholder="Enter your answer..."
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              disabled={isLoadingQuestion || isEvaluating || !!feedback}
+            />
+
+            {feedback ? (
+              <div className={`feedback-box ${score < 100 && feedback.toLowerCase().includes('incorrect') ? 'incorrect' : 'correct'}`}>
+                <p style={{ margin: '0 0 16px', lineHeight: '1.5', color: '#374151' }}><strong>AI Feedback:</strong> {feedback}</p>
+                <button
+                  className="submit-btn"
+                  style={{ backgroundColor: config.color }}
+                  onClick={loadQuestion}
+                >
+                  Next Question
+                </button>
+              </div>
+            ) : (
+              <button
+                className="submit-btn"
+                style={{ backgroundColor: config.color, opacity: (isLoadingQuestion || isEvaluating || !answer.trim()) ? 0.7 : 1 }}
+                onClick={checkAnswer}
+                disabled={isLoadingQuestion || isEvaluating || !answer.trim()}
+              >
+                {isEvaluating ? "Evaluating..." : "Submit Answer"}
+              </button>
+            )}
+          </div>
+        </div>
+
+        <ScoreBar score={score} color={config.color} />
+      </div>
     </div>
   );
 }

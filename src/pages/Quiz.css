@@ -186,3 +186,31 @@
     padding: 24px;
   }
 }
+
+.feedback-box {
+  padding: 20px;
+  border-radius: 12px;
+  background: #f3f4f6;
+  border-left: 4px solid #9ca3af;
+  margin-top: 16px;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.feedback-box.correct {
+  background: #ecfdf5;
+  border-left-color: #10b981;
+}
+
+.feedback-box.incorrect {
+  background: #fef2f2;
+  border-left-color: #ef4444;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.submit-btn:disabled {
+  cursor: not-allowed;
+}
