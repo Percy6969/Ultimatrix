@@ -50,8 +50,28 @@ function Quiz() {
   };
 
   useEffect(() => {
-    loadQuestion();
-  }, [subject]);
+    let isActive = true;
+
+    const initializeQuestion = async () => {
+      setIsLoadingQuestion(true);
+      setFeedback("");
+      setAnswer("");
+      const newQ = await generateQuestion(config.label);
+
+      if (!isActive) {
+        return;
+      }
+
+      setQuestion(newQ);
+      setIsLoadingQuestion(false);
+    };
+
+    initializeQuestion();
+
+    return () => {
+      isActive = false;
+    };
+  }, [config.label]);
 
   const checkAnswer = async () => {
     if (!answer.trim()) return;
