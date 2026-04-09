@@ -1,17 +1,5 @@
 const BASE_URL = "/api";
 
-<<<<<<< HEAD
-async function postJson(path, body) {
-  const response = await fetch(`${BASE_URL}${path}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(errorText || `Request failed with status ${response.status}`);
-=======
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY?.trim();
 const genAI = apiKey ? new GoogleGenerativeAI(apiKey) : null;
 const model = genAI?.getGenerativeModel({ model: "gemini-2.0-flash" });
@@ -147,14 +135,9 @@ async function callWithRetry(fn, retries = 1) {
       return callWithRetry(fn, retries - 1);
     }
     throw error;
->>>>>>> 3bab81763f2a18974c8a28f21cc2a22adfbfdf73
   }
-
-  return response.json();
 }
 
-<<<<<<< HEAD
-=======
 function evaluateFallbackAnswer(question, answer, subject) {
   const fallbackQuestion = findFallbackQuestion(subject, question);
   const normalizedAnswer = normalizeText(answer);
@@ -184,17 +167,12 @@ function evaluateFallbackAnswer(question, answer, subject) {
 /**
  * Generates a concept question for the given subject.
  */
->>>>>>> 3bab81763f2a18974c8a28f21cc2a22adfbfdf73
 export async function generateQuestion(subject) {
   if (!model) {
     return pickFallbackQuestion(subject).question;
   }
 
   try {
-<<<<<<< HEAD
-    const data = await postJson("/question", { subject });
-    return data.question;
-=======
     const prompt = `You are a teacher evaluating a student.
 Please ask a single, simple, viva-like question about ${subject}.
 The question should be able to be answered in a few words.
@@ -204,35 +182,22 @@ Do not include any introductory text or formatting, just return the exact string
     const generatedQuestion = result.response.text().trim();
 
     return generatedQuestion || pickFallbackQuestion(subject).question;
->>>>>>> 3bab81763f2a18974c8a28f21cc2a22adfbfdf73
   } catch (error) {
     console.error("Error generating question:", error);
     return pickFallbackQuestion(subject).question;
   }
 }
 
-<<<<<<< HEAD
-=======
 /**
  * Validates the user's answer against the given question.
  * Returns { isCorrect: boolean, explanation: string }.
  */
->>>>>>> 3bab81763f2a18974c8a28f21cc2a22adfbfdf73
 export async function validateAnswer(question, answer, subject) {
   if (!model) {
     return evaluateFallbackAnswer(question, answer, subject);
   }
 
   try {
-<<<<<<< HEAD
-    return await postJson("/validate", { question, answer, subject });
-  } catch (error) {
-    console.error("Error validating answer:", error);
-    return {
-      isCorrect: false,
-      explanation: "Something went wrong evaluating your answer (AI Error). Please try again.",
-    };
-=======
     const prompt = `You are an encouraging and fair teacher for a ${subject} class.
 
 The question you asked the student was: "${question}"
@@ -273,6 +238,5 @@ Respond STRICTLY with a simple JSON object in exactly this format without markdo
   } catch (error) {
     console.error("Error validating answer:", error);
     return evaluateFallbackAnswer(question, answer, subject);
->>>>>>> 3bab81763f2a18974c8a28f21cc2a22adfbfdf73
   }
 }
