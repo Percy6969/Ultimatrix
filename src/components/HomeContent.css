@@ -1,41 +1,65 @@
 .home-content {
   max-width: 1180px;
   margin: 0 auto;
+  animation: fadeInUp 0.8s ease both;
 }
 
 .hero-copy {
-  max-width: 680px;
+  max-width: 760px;
+  margin: 0 auto 72px;
+  text-align: center;
+  padding: 0 24px;
 }
 
-.eyebrow {
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  font-size: 12px;
+.hero-brand {
+  font-family: "Algerian", serif;
+  font-size: clamp(4rem, 5.5vw, 5.5rem);
+  line-height: 1.08;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  margin: 0 0 24px;
+  color: #111827;
+  white-space: nowrap;
+}
+
+.tagline-badge {
+  display: inline-flex;
+  padding: 10px 16px;
+  margin-bottom: 18px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: #4f46e5;
+  font-size: 0.9rem;
   font-weight: 700;
-  margin-bottom: 16px;
-  color: #7c3aed;
+  letter-spacing: 0.08em;
+  box-shadow: 0 10px 30px rgba(79, 70, 229, 0.12);
 }
 
 .hero-title {
-  font-size: clamp(2.4rem, 2.2vw, 3.4rem);
-  line-height: 1.08;
-  margin: 0;
+  font-size: clamp(2.5rem, 3.5vw, 3rem);
+  line-height: 1.18;
+  margin: 0 0 40px;
   color: #111827;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  max-width: 780px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .hero-subtitle {
-  margin-top: 16px;
-  color: #6b7280;
-  font-size: 1rem;
-  max-width: 540px;
-  line-height: 1.75;
+  margin: 0 auto 56px;
+  color: #5f6d89;
+  font-size: 1.12rem;
+  max-width: 600px;
+  line-height: 1.8;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 24px;
-  margin-top: 40px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+  margin-top: 0;
 }
 
 /* CARD */
@@ -44,63 +68,112 @@
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
-  background: #ffffff;
-  padding: 28px;
-  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.96);
+  padding: 32px;
+  border-radius: 30px;
   cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-  border: 1px solid rgba(229, 228, 231, 0.9);
+  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+  border: 1px solid rgba(229, 228, 231, 0.78);
+  border-top: 6px solid transparent;
   font: inherit;
+  overflow: hidden;
 }
 
 .card:hover,
 .card:focus-visible {
-  transform: translateY(-4px);
-  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.08);
-  border-color: rgba(149, 157, 165, 0.25);
+  transform: translateY(-5px);
+  box-shadow: 0 30px 90px rgba(15, 23, 42, 0.12);
+  border-color: rgba(149, 157, 165, 0.16);
   outline: none;
+}
+
+.card-physics {
+  border-top-color: rgba(37, 99, 235, 0.8);
+}
+
+.card-chemistry {
+  border-top-color: rgba(20, 184, 166, 0.82);
+}
+
+.card-mathematics {
+  border-top-color: rgba(139, 92, 246, 0.8);
 }
 
 /* ICON */
 .icon-box {
-  width: 56px;
-  height: 56px;
+  width: 70px;
+  height: 70px;
   color: white;
   display: grid;
   place-items: center;
-  border-radius: 18px;
-  font-size: 24px;
-  margin-bottom: 20px;
+  border-radius: 22px;
+  font-size: 30px;
+  margin-bottom: 24px;
+  transition: transform 0.3s ease;
+}
+
+.card:hover .icon-box,
+.card:focus-visible .icon-box {
+  transform: rotate(10deg) scale(1.05);
 }
 
 /* TITLE */
 .card-title {
-  font-size: 1.2rem;
+  font-size: 1.35rem;
   font-weight: 700;
   color: #111827;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 /* DESCRIPTION */
 .card-desc {
-  font-size: 0.95rem;
-  color: #6b7280;
-  margin-bottom: 18px;
-  line-height: 1.7;
+  font-size: 1rem;
+  color: #5f6d89;
+  margin-bottom: 24px;
+  line-height: 1.75;
 }
 
 /* CTA */
 .card-cta {
-  font-size: 0.95rem;
-  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: rgba(79, 70, 229, 0.1);
   color: #4f46e5;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  opacity: 0.96;
+  transition: transform 0.3s ease, background 0.25s ease, color 0.25s ease;
 }
 
 .card:hover .card-cta,
 .card:focus-visible .card-cta {
-  opacity: 1;
-  transform: translateY(0);
+  transform: translateY(-1px);
+  background: rgba(79, 70, 229, 0.18);
+  color: #3730a3;
+}
+
+@media (max-width: 960px) {
+  .hero-copy {
+    max-width: 100%;
+    margin-bottom: 48px;
+    text-align: center;
+  }
+
+  .hero-title {
+    font-size: clamp(2.5rem, 7vw, 3.4rem);
+    line-height: 1.2;
+  }
+
+  .hero-subtitle {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .grid {
+    gap: 22px;
+  }
 }

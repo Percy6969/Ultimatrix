@@ -1,7 +1,36 @@
 .dashboard {
   display: flex;
   min-height: 100vh;
-  background: #f5f7fb;
+  background: linear-gradient(180deg, #f6f0ff 0%, #eef5ff 46%, #f8fbff 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard::before,
+.dashboard::after {
+  content: "";
+  position: absolute;
+  filter: blur(72px);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.dashboard::before {
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  background: rgba(139, 92, 246, 0.25);
+  top: -90px;
+  right: -120px;
+}
+
+.dashboard::after {
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: rgba(56, 189, 248, 0.18);
+  bottom: -140px;
+  left: -100px;
 }
 
 /* SIDEBAR */
@@ -27,7 +56,20 @@
 /* MAIN AREA */
 .main {
   flex: 1;
-  padding: 44px 48px;
+  padding: 100px 64px;
+  position: relative;
+}
+
+.main::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 20%, rgba(167, 139, 250, 0.12), transparent 28%),
+    radial-gradient(circle at 85% 10%, rgba(56, 189, 248, 0.12), transparent 24%);
+  pointer-events: none;
+}
+
+.main > * {
   position: relative;
 }
 
@@ -67,7 +109,7 @@
   }
 
   .main {
-    padding: 28px;
+    padding: 48px 28px;
   }
 
   .hamburger-btn {

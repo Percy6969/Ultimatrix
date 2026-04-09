@@ -53,8 +53,21 @@ function Quiz() {
     loadQuestion();
   }, [subject]);
 
+  const isComplete = score >= 100;
+  const isFailed = score <= 0;
+  const isFinal = isComplete || isFailed;
+
+  const resetSubject = () => {
+    updateScore(50);
+    setFeedback("");
+    setAnswer("");
+    setQuestion("Loading question...");
+    setIsLoadingQuestion(true);
+    loadQuestion();
+  };
+
   const checkAnswer = async () => {
-    if (!answer.trim()) return;
+    if (!answer.trim() || isFinal) return;
     setIsEvaluating(true);
 
     const result = await validateAnswer(question, answer, config.label);
@@ -93,42 +106,70 @@ function Quiz() {
 
           <h1 className="quiz-title">{config.label}</h1>
 
-          <div className="question-card">
-            <h2 className="question-label">Question</h2>
-            <p className="question-text">
-              {isLoadingQuestion ? <span className="loading-text" style={{ color: '#9ca3af', fontStyle: 'italic' }}>Our AI is generating a question...</span> : question}
-            </p>
-
-            <textarea
-              className="answer-input"
-              placeholder="Enter your answer..."
-              value={answer}
-              onChange={(e) => setAnswer(e.target.value)}
-              disabled={isLoadingQuestion || isEvaluating || !!feedback}
-            />
-
-            {feedback ? (
-              <div className={`feedback-box ${score < 100 && feedback.toLowerCase().includes('incorrect') ? 'incorrect' : 'correct'}`}>
-                <p style={{ margin: '0 0 16px', lineHeight: '1.5', color: '#374151' }}><strong>AI Feedback:</strong> {feedback}</p>
-                <button
-                  className="submit-btn"
-                  style={{ backgroundColor: config.color }}
-                  onClick={loadQuestion}
-                >
-                  Next Question
+          {isFinal ? (
+            <div className="final-screen" style={{ backgroundImage: isComplete ? 'none' : 'linear-gradient(135deg, rgba(148, 187, 233, 0.15) 0%, rgba(179, 157, 219, 0.15) 100%)' }}>
+              {isComplete ? (
+                <div className="final-stars" style={{ color: config.color }}>
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <span key={index}>★</span>
+                  ))}
+                </div>
+              ) : (
+                <div className="final-emoji-illustration">🤔</div>
+              )}
+              <h2 className="final-title">
+                {isComplete ? `5-Star in ${config.label}` : "No Worries... Try Again"}
+              </h2>
+              <p className="final-copy">
+                {isComplete
+                  ? "Congratulations! You've mastered this topic."
+                  : "Mistakes happen! Learning is a journey, and every attempt brings you closer to mastery. Let's give it another shot! 🚀"}
+              </p>
+              <div className="final-actions">
+                <button className="final-primary-btn" onClick={() => navigate("/")}>{isComplete ? '' : '⬅️ '}Back to Topics</button>
+                <button className="final-secondary-btn" style={{ borderColor: config.color, color: config.color }} onClick={resetSubject}>
+                  {isComplete ? '🔄 Try Again' : '🔄 Start Over'}
                 </button>
               </div>
-            ) : (
-              <button
-                className="submit-btn"
-                style={{ backgroundColor: config.color, opacity: (isLoadingQuestion || isEvaluating || !answer.trim()) ? 0.7 : 1 }}
-                onClick={checkAnswer}
-                disabled={isLoadingQuestion || isEvaluating || !answer.trim()}
-              >
-                {isEvaluating ? "Evaluating..." : "Submit Answer"}
-              </button>
-            )}
-          </div>
+            </div>
+          ) : (
+            <div className="question-card">
+              <h2 className="question-label">Question</h2>
+              <p className="question-text">
+                {isLoadingQuestion ? <span className="loading-text" style={{ color: '#9ca3af', fontStyle: 'italic' }}>Our AI is generating a question...</span> : question}
+              </p>
+
+              <textarea
+                className="answer-input"
+                placeholder="Enter your answer..."
+                value={answer}
+                onChange={(e) => setAnswer(e.target.value)}
+                disabled={isLoadingQuestion || isEvaluating || !!feedback}
+              />
+
+              {feedback ? (
+                <div className={`feedback-box ${score < 100 && feedback.toLowerCase().includes('incorrect') ? 'incorrect' : 'correct'}`}>
+                  <p style={{ margin: '0 0 16px', lineHeight: '1.5', color: '#374151' }}><strong>AI Feedback:</strong> {feedback}</p>
+                  <button
+                    className="submit-btn"
+                    style={{ backgroundColor: config.color }}
+                    onClick={loadQuestion}
+                  >
+                    Next Question
+                  </button>
+                </div>
+              ) : (
+                <button
+                  className="submit-btn"
+                  style={{ backgroundColor: config.color, opacity: (isLoadingQuestion || isEvaluating || !answer.trim()) ? 0.7 : 1 }}
+                  onClick={checkAnswer}
+                  disabled={isLoadingQuestion || isEvaluating || !answer.trim()}
+                >
+                  {isEvaluating ? "Evaluating..." : "Submit Answer"}
+                </button>
+              )}
+            </div>
+          )}
         </div>
 
         <ScoreBar score={score} color={config.color} />

@@ -5,8 +5,9 @@ function HomeContent() {
   return (
     <div className="home-content">
       <div className="hero-copy">
-        <p className="eyebrow">Socratic Mirror</p>
-        <h1 className="hero-title">Choose a topic to begin your learning journey</h1>
+        <h1 className="hero-brand">SOCRATIC MIRROR</h1>
+        <span className="tagline-badge">AI-powered learning companion</span>
+        <h2 className="hero-title">Choose a topic to begin your learning journey</h2>
         <p className="hero-subtitle">
           Pick a subject and start practicing with curated questions designed to build confidence.
         </p>

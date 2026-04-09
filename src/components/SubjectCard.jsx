@@ -8,14 +8,14 @@ function SubjectCard({ title, description, icon, iconBg }) {
   };
 
   return (
-    <button className="card" onClick={handleClick} type="button">
+    <button className={`card card-${title.toLowerCase()}`} onClick={handleClick} type="button">
       <div className="icon-box" style={{ backgroundColor: iconBg }}>
         {icon}
       </div>
       <div className="card-body">
         <h3 className="card-title">{title}</h3>
         <p className="card-desc">{description}</p>
-        <span className="card-cta">Start learning</span>
+        <span className="card-cta">Start Learning →</span>
       </div>
     </button>
   );
